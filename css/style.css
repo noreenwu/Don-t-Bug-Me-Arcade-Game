@@ -13,7 +13,9 @@ body {
 /* The Modal (background) */
 .modal {
   color: white;
-  font-size: 2em;
+  font-size: 1.2em;
+  /* font-family: 'Coda', cursive; */
+  font-family: Helvetica, Arial;
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -26,3 +28,54 @@ body {
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
+
+/* The Close Button */
+/* .close {
+  color: #aaaaaa;
+  float: right;
+
+  font-size: 28px;
+  font-family: 'Coda', cursive;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+} */
+
+.play-again {
+  padding: 20px;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #abd6d8;
+}
+
+button:active {
+  background-color: #1e6285;
+}
+
+.button {
+  padding: 15px 32px;
+  margin: 20px 0;
+  text-align: center;
+  display: inline-block;
+  font-size: 18px;
+}
+
+.button-response {
+  padding: 10px;
+}
+
+.yes-button {
+  background-color: #02b6b3;
+}
+
+.no-button {
+  background-color: grey;
+}ß

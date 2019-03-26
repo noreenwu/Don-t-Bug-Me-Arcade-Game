@@ -5,7 +5,7 @@ var Enemy = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = 'images/enemy-bug-trimmed.png';
     this.x = 20;
     this.y = 80;
     this.rate = 2;
@@ -31,7 +31,7 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
     // this.sprite = 'images/char-cat-girl.png';
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-boy-trimmed.png';
     this.x = 200;
     this.y = 400;
     // this.w = Resources.get('images/char-boy.png').naturalWidth;
@@ -42,6 +42,10 @@ Player.prototype.update = function(dt) {
 
 };
 
+Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 400;
+};
 
 function move(moveData, stayOnBoard) {
   // moveData will be an array of needed values (current position,
@@ -127,8 +131,24 @@ let allEnemies = [enemy1];
 
 let player = new Player();
 
+function closeModal() {
+  console.log("closeModal");
+  document.getElementById('congrats-modal').style.display = "none";
+  document.getElementsByClassName('modal')[0].style.display = "none";
+}
 
 
+function resetPlayerPosition() {
+  player.reset();
+}
+
+function newGame() {
+  console.log("new game...");
+  closeModal();
+  // reset();                // move player back to starting place
+  resetPlayerPosition();
+  listenForKeyInputs();   // listen for key inputs
+}
 
 
 
@@ -157,8 +177,8 @@ function stopListeningForKeyInputs() {
 }
 
 function showWinner() {
-  const mw = document.getElementById('congrats-modal').style.display = "block";
-  const m = document.getElementsByClassName('modal')[0].style.display = "block";
+  document.getElementById('congrats-modal').style.display = "block";
+  document.getElementsByClassName('modal')[0].style.display = "block";
 
   stopListeningForKeyInputs();
 }
