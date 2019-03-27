@@ -1,14 +1,14 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x, y, rate) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug-trimmed.png';
-    this.x = 20;
-    this.y = 80;
-    this.rate = 2;
+    this.x = x;
+    this.y = y;
+    this.rate = rate;
     this.identifier = 0;
 };
 
@@ -31,9 +31,9 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
     // this.sprite = 'images/char-cat-girl.png';
-    this.sprite = 'images/char-boy-trimmed.png';
+    this.sprite = 'images/char-boy-trimmed-red-background.png';
     this.x = 200;
-    this.y = 400;
+    this.y = 500;
     // this.w = Resources.get('images/char-boy.png').naturalWidth;
     // this.h = Resources.get('images/char-boy.png').naturalHeight;
 }
@@ -44,7 +44,7 @@ Player.prototype.update = function(dt) {
 
 Player.prototype.reset = function() {
     this.x = 200;
-    this.y = 400;
+    this.y = 500;
 };
 
 function move(moveData, stayOnBoard) {
@@ -57,15 +57,10 @@ function move(moveData, stayOnBoard) {
   //    left or up (towards the 0,0 coordinate)
 
   const [coord, change, lim] = moveData;
-  console.log("move");
+  // console.log("move");
 
   return stayOnBoard(moveData);
 }
-
-// function notTooLow() {
-//   console.log("notTooLow");
-//   return (30);
-// }
 
 function notTooLow(moveData) {
 
@@ -91,17 +86,17 @@ function notTooHigh(moveData) {
 Player.prototype.handleInput = function(k) {
   if (k == 'up') {
     // this.y -= 10;
-    this.y = move([this.y, -20, 0], notTooLow);   // TODO: give 0 a name
+    this.y = move([this.y, -18, 0], notTooLow);    // TODO: give 0 a name
 
   } else if (k == 'down') {
     // this.y += 10;
-    this.y = move([this.y, +20, 450], notTooHigh);
+    this.y = move([this.y, +18, 500], notTooHigh); // high in coordinate value but bottom of screen
   } else if (k == 'left') {
     // this.x -= 10;
-    this.x = move([this.x, -20, 0], notTooLow);
+    this.x = move([this.x, -18, 0], notTooLow);
   } else if (k == 'right') {
     // this.x += 10;
-    this.x = move([this.x, +20, 415], notTooHigh);
+    this.x = move([this.x, +18, 415], notTooHigh);
   }
 };
 
@@ -112,31 +107,23 @@ Player.prototype.render = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let enemy1 = new Enemy();
-let enemy2 = new Enemy();
-let enemy3 = new Enemy();
-enemy2.x += 80;
-enemy2.y += 60;
-enemy2.rate = 0;
-enemy2.identifier = 1;
-
-enemy3.x = 0;
-enemy3.y = 100;
-enemy3.rate = 4;
-enemy3.identifier = 2;
-
-// let allEnemies = [enemy1, enemy2, enemy3];
-enemy1.rate = 0;
-let allEnemies = [enemy1];
+let allEnemies = [new Enemy(0, 120, .75), new Enemy(0, 200, 1.25),
+                  new Enemy(0, 270, 1.5), new Enemy(10, 380, 2)];
 
 let player = new Player();
+let playing = true;
 
 function closeModal() {
   console.log("closeModal");
   document.getElementById('congrats-modal').style.display = "none";
+  document.getElementsByClassName('thankyou-modal')[0].style.display = "none";
+  document.getElementsByClassName('sorry-modal')[0].style.display = "none";
   document.getElementsByClassName('modal')[0].style.display = "none";
 }
 
+function showThanksComeAgain() {
+  document.getElementsByClassName('thankyou-modal')[0].style.display = 'block';
+}
 
 function resetPlayerPosition() {
   player.reset();
@@ -148,6 +135,7 @@ function newGame() {
   // reset();                // move player back to starting place
   resetPlayerPosition();
   listenForKeyInputs();   // listen for key inputs
+  playing = true;
 }
 
 
@@ -176,11 +164,20 @@ function stopListeningForKeyInputs() {
   document.removeEventListener('keyup', handleKey);
 }
 
+function tryAgain() {
+  document.getElementsByClassName('sorry-modal')[0].style.display = "block";
+  // document.getElementsByClassName('modal')[0].style.display = "block";
+  stopListeningForKeyInputs();
+  playing = false;
+}
+
 function showWinner() {
   document.getElementById('congrats-modal').style.display = "block";
   document.getElementsByClassName('modal')[0].style.display = "block";
 
   stopListeningForKeyInputs();
+  playing = false;
+
 }
 
 listenForKeyInputs();

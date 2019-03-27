@@ -78,8 +78,10 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        updateEntities(dt);
-        return checkCollisions();
+        if (playing) {
+          updateEntities(dt);
+          checkCollisions();
+        }
     }
 
     function checkCollisions() {
@@ -99,12 +101,13 @@ var Engine = (function(global) {
             x: 0,
             y: 0,
             width: 905,
-            height: 171 };
+            height: 111 };
 
+        // if (playing == false) {
+        //   return false;            // don't detect collisions if user is not playing
+        // }
         // has the player won?
         if (detectObjectOverlap(waterRect, playerRect)) {
-           let msg = "PLAYER HAS WON!";
-           console.log(msg);
            showWinner();
         }
 
@@ -112,16 +115,14 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemyRect.x = enemy.x;
             enemyRect.y = enemy.y;
-            enemyRect.width = Resources.get(enemy.sprite).naturalWidth;
+            enemyRect.width = Resources.get(enemy.sprite).naturalWidth-10;
             enemyRect.height = Resources.get(enemy.sprite).naturalHeight;
 
             playerRect.x = player.x;
             playerRect.y = player.y;
 
             if (detectObjectOverlap(enemyRect, playerRect)) {
-              const msg = "GAME OVER: collided with enemy " + enemy.identifier;
-              console.log(msg);
-              alert(msg);
+              tryAgain();
             }
 
         });
@@ -238,7 +239,8 @@ var Engine = (function(global) {
         // 'images/char-boy-background.png',
         // 'images/enemy-bug-background.png',
         'images/enemy-bug-trimmed.png',
-        'images/char-boy-trimmed.png'
+        'images/char-boy-trimmed.png',
+        'images/char-boy-trimmed-red-background.png'
     ]);
     Resources.onReady(init);
 

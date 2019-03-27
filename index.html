@@ -22,8 +22,7 @@
         <div class="play-again">
           Do you want to play again?
           <div class="button-responses">
-            <button class="button yes-button" onclick="newGame();">Yes</button>
-            <button class="button no-button" onclick="closeModal();">No</button>
+            <button class="button yes-button" onclick="newGame();">Play Again</button>
           </div>
         </div>
       </div>
@@ -31,8 +30,15 @@
     </div>
 
 
-    <div class="modal-sorry">
-      <p>Oops! You were eaten by a giant bug! Play again?</p>
+    <div class="sorry-modal modal">
+      <p>Whoa! These bugs sure are of unusual size!</p>
+      <p>Play again?</p>
+      <button class="button yes-button" onclick="newGame();">Play Again</button>
+    </div>
+
+    <div class="thankyou-modal modal">
+      <p>Thank you for playing. Please come again!</p>
+      <button class="button yes-button" onclick="newGame();">Play Again</button>
     </div>
 
     <script src="js/resources.js"></script>
