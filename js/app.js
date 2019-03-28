@@ -1,15 +1,15 @@
-// Enemies our player must avoid
-var Enemy = function(x, y, rate) {
+// Enemies our player must avoid (unless it's a gem, an "antiEnemy")
+var Enemy = function(x, y, rate, sprite = 'images/enemy-bug-trimmed.png') {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug-trimmed.png';
+    this.sprite = sprite;
     this.x = x;
     this.y = y;
     this.rate = rate;
-    this.identifier = 0;
+    (sprite != 'images/enemy-bug-trimmed.png') ? this.antiEnemy = true : this.antiEnemy = false;
 };
 
 // Update the enemy's position, required method for game
@@ -25,6 +25,7 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -47,6 +48,13 @@ Player.prototype.reset = function() {
     this.y = 500;
 };
 
+Player.prototype.nmove = function(moveData, stayOnBoard) {
+  const [coord, change, lim] = moveData;
+  // console.log("move");
+
+  return stayOnBoard(moveData);
+}
+
 function move(moveData, stayOnBoard) {
   // moveData will be an array of needed values (current position,
   //    amount to move and what limit is being observed)
@@ -62,17 +70,26 @@ function move(moveData, stayOnBoard) {
   return stayOnBoard(moveData);
 }
 
-function notTooLow(moveData) {
+Player.prototype.notTooLow = function(moveData) {
+  const [coord, change, lim] = moveData;
+  console.log("notTooLow " + coord);
 
-    const [coord, change, lim] = moveData;
-    console.log("notTooLow " + coord);
-
-    let proposedChange = coord + change;
-    return (proposedChange >= lim ? proposedChange : coord);
-       // only allow the change if the result is not below the lower limit of screen
+  let proposedChange = coord + change;
+  return (proposedChange >= lim ? proposedChange : coord);
+     // only allow the change if the result is not below the lower limit of screen
 }
 
-function notTooHigh(moveData) {
+// function notTooLow(moveData) {
+//
+//     const [coord, change, lim] = moveData;
+//     console.log("notTooLow " + coord);
+//
+//     let proposedChange = coord + change;
+//     return (proposedChange >= lim ? proposedChange : coord);
+//        // only allow the change if the result is not below the lower limit of screen
+// }
+
+Player.prototype.notTooHigh = function(moveData) {
   const [coord, change, lim] = moveData;
 
   console.log("notTooHigh " + coord);
@@ -82,21 +99,31 @@ function notTooHigh(moveData) {
   // only allow the change to take effect if the limit is not exceeded
 }
 
+// function notTooHigh(moveData) {
+//   const [coord, change, lim] = moveData;
+//
+//   console.log("notTooHigh " + coord);
+//   let proposedChange = coord + change;
+//
+//   return (proposedChange <= lim ? proposedChange : coord);
+//   // only allow the change to take effect if the limit is not exceeded
+// }
+
 
 Player.prototype.handleInput = function(k) {
   if (k == 'up') {
     // this.y -= 10;
-    this.y = move([this.y, -18, 0], notTooLow);    // TODO: give 0 a name
+    this.y = this.nmove([this.y, -18, 0], this.notTooLow);    // TODO: give 0 a name
 
   } else if (k == 'down') {
     // this.y += 10;
-    this.y = move([this.y, +18, 500], notTooHigh); // high in coordinate value but bottom of screen
+    this.y = this.nmove([this.y, +18, 500], this.notTooHigh); // high in coordinate value but bottom of screen
   } else if (k == 'left') {
     // this.x -= 10;
-    this.x = move([this.x, -18, 0], notTooLow);
+    this.x = this.nmove([this.x, -18, 0], this.notTooLow);
   } else if (k == 'right') {
     // this.x += 10;
-    this.x = move([this.x, +18, 415], notTooHigh);
+    this.x = this.nmove([this.x, +18, 415], this.notTooHigh);
   }
 };
 
@@ -104,13 +131,30 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+
+var GemBoard = function() {
+   this.sprite = 'images/blue-gem-trimmed.png';
+   this.x = 0;
+   this.y = 500;
+}
+
+GemBoard.prototype.render = function() {
+   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+GemBoard.prototype.rewarded = function() {
+   this.x += 100;
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 let allEnemies = [new Enemy(0, 120, .75), new Enemy(0, 200, 1.25),
-                  new Enemy(0, 270, 1.5), new Enemy(10, 380, 2)];
+                  new Enemy(0, 270, 1.5), new Enemy(10, 380, 2),
+                  new Enemy(-10, 270, 1.8, 'images/blue-gem-trimmed.png')];
 
 let player = new Player();
+let gems = new GemBoard();
 let playing = true;
 
 function closeModal() {

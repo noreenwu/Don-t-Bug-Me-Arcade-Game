@@ -215,6 +215,7 @@ var Engine = (function(global) {
         });
 
         player.render();
+        gems.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -240,7 +241,8 @@ var Engine = (function(global) {
         // 'images/enemy-bug-background.png',
         'images/enemy-bug-trimmed.png',
         'images/char-boy-trimmed.png',
-        'images/char-boy-trimmed-red-background.png'
+        'images/char-boy-trimmed-red-background.png',
+        'images/blue-gem-trimmed.png'
     ]);
     Resources.onReady(init);
 
