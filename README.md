@@ -7,6 +7,19 @@
 
 ## Instructions
 
+If you've ever played the old Arcade game Frogger, this game will be very similar.
+You, the player, have to navigate to the water without colliding with any of the
+oncoming enemies: giant bugs! If you do collide with one of the bugs, the game
+ends, and you have lost. However, if you manage to avoid the bugs and reach the
+water at the opposite side of the playing field, you win!
+
+To navigate, use the arrow keys to move up, down, left and right.
+
+Move twice as fast by holding down the Shift key.
+
+To load the game, open index.html in any browser window. 
+
+
 Use this [rubric](https://review.udacity.com/#!/rubrics/15/view) for self-checking your submission.
 
 Make sure the functions you write are **object-oriented** - either class functions (like `Player` and `Enemy`) or class prototype functions such as `Enemy.prototype.checkCollisions`. Also make sure that the keyword `this` is used appropriately within your class and class prototype functions to refer to the object the function is called upon.
