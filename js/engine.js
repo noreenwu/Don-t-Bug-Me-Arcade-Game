@@ -123,7 +123,9 @@ var Engine = (function(global) {
             playerRect.x = player.x;
             playerRect.y = player.y;
 
-            if (detectObjectOverlap(enemyRect, playerRect)) {
+            // if a collision with a bug (enemy) is detected then unless the player
+            // has extra health from intersecting with the heart, then the game ends.
+            if (detectObjectOverlap(enemyRect, playerRect) && !player.isExtraHealthy() ) {
               tryAgain();
             }
 
@@ -139,6 +141,10 @@ var Engine = (function(global) {
             player.gotHealth();
             // make heart disappear
             console.log("YOU GOT HEALTH!");
+            // enemies are harmless until health times out
+            allEnemies.forEach(function(enemy) {
+                enemy.harmlessSprite();
+            });
         }
         return false;
     }
@@ -255,7 +261,8 @@ var Engine = (function(global) {
         'images/char-boy-trimmed.png',
         'images/char-boy-trimmed-red-background.png',
         'images/blue-gem-trimmed.png',
-        'images/heart-trimmed.png'
+        'images/heart-trimmed.png',
+        'images/ghost-bug.png'
     ]);
     Resources.onReady(init);
 

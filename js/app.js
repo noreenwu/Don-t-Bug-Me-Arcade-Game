@@ -28,6 +28,27 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.harmlessSprite = function() {
+  this.sprite = 'images/ghost-bug.png';
+  setTimeout(this.enemyStatus, 5000, this);
+}
+
+// Enemy.prototype.flashStatus = function(obj) {
+//     if (obj.sprite == 'images/enemy-bug-trimmed.png') {
+//       obj.sprite = 'images/ghost-bug.png';
+//     }
+//     else {
+//       obj.sprite = 'images/enemy-bug-trimmed.png';
+//     }
+// }
+
+Enemy.prototype.enemyStatus = function(obj) {
+    obj.sprite = 'images/enemy-bug-trimmed.png';
+}
+
+// Enemy.prototype.harmlessStatus = function(obj) {
+//     obj.sprite = 'images/ghost-bug.png';
+// }
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -83,7 +104,6 @@ Player.prototype.move = function(moveData, stayOnBoard) {
 
 Player.prototype.notTooLow = function(moveData) {
   const [coord, change, lim] = moveData;
-  console.log("notTooLow " + coord);
 
   let proposedChange = coord + change;
   return (proposedChange >= lim ? proposedChange : coord);
@@ -93,9 +113,7 @@ Player.prototype.notTooLow = function(moveData) {
 Player.prototype.notTooHigh = function(moveData) {
   const [coord, change, lim] = moveData;
 
-  console.log("notTooHigh " + coord);
   let proposedChange = coord + change;
-
   return (proposedChange <= lim ? proposedChange : coord);
   // only allow the change to take effect if the limit is not exceeded
 }
@@ -117,8 +135,17 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+let Location = function(x, y) {
+  this.x = 0;
+  this.y = 0;
+}
+
 var Health = function() {
   this.sprite = 'images/heart-trimmed.png';
+  // this.locations = [ new Location(140, 350), new Location(170, 200)];
+  this.locationsX = [ 140, 350, 200, 300, 140 ];
+  this.locationsY = [ 350, 300, 100, 200, 350 ];
+  this.locationIdx = 0;
   this.x = 140;
   this.y = 350;
   this.displayMe = true;
@@ -127,7 +154,7 @@ var Health = function() {
 
 Health.prototype.setup = function() {
     console.log("Health setup");
-    setInterval(this.changeDisplay, 3000, this);
+    setInterval(this.changeDisplay, 1000, this);
 }
 
 Health.prototype.stop = function() {
@@ -137,13 +164,16 @@ Health.prototype.stop = function() {
 }
 
 Health.prototype.changeDisplay = function(obj) {
+    console.log("locationIdx " + obj.locationIdx);
     obj.displayMe = ! obj.displayMe;
-    // obj.x += 10;
-    // obj.y -= 30;
+    obj.x = obj.locationsX[obj.locationIdx];
+    obj.y = obj.locationsY[obj.locationIdx];
+    // rotate the heart location based on the arrays of coordinates
+    obj.locationIdx = (obj.locationIdx + 1) % obj.locationsX.length;
 }
 
 Health.prototype.render = function() {
-   if ( (this.displayMe == true) && !player.isExtraHealthy() ) {
+   if ( (this.displayMe == true) && !player.isExtraHealthy() && playing ) {
      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
    }
 }
