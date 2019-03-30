@@ -106,6 +106,8 @@ var Engine = (function(global) {
         // if (playing == false) {
         //   return false;            // don't detect collisions if user is not playing
         // }
+
+
         // has the player won?
         if (detectObjectOverlap(waterRect, playerRect)) {
            showWinner();
@@ -126,18 +128,27 @@ var Engine = (function(global) {
             }
 
         });
+
+        let hhRect = {
+          x: heartHealth.x,
+          y: heartHealth.y,
+          width: Resources.get(heartHealth.sprite).naturalWidth,
+          height: Resources.get(heartHealth.sprite).naturalHeight };
+
+        if (detectObjectOverlap(hhRect, playerRect)) {
+            player.gotHealth();
+            // make heart disappear
+            console.log("YOU GOT HEALTH!");
+        }
         return false;
     }
 
     function detectObjectOverlap(rect1, rect2) {
-      // console.log("detectObjectOverlap");
 
       if (rect1.x < rect2.x + rect2.width &&
          rect1.x + rect1.width > rect2.x &&
          rect1.y < rect2.y + rect2.height &&
          rect1.y + rect1.height > rect2.y) {
-            // console.log(rect1, rect2);
-            // console.log("COLLISION");
             return true;
       }
       return false;
@@ -215,6 +226,7 @@ var Engine = (function(global) {
         });
 
         player.render();
+        heartHealth.render();
         gems.render();
     }
 
@@ -236,13 +248,14 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/char-cat-girl.png',
+        'images/char-cat-girl-trimmed.png',
         // 'images/char-boy-background.png',
         // 'images/enemy-bug-background.png',
         'images/enemy-bug-trimmed.png',
         'images/char-boy-trimmed.png',
         'images/char-boy-trimmed-red-background.png',
-        'images/blue-gem-trimmed.png'
+        'images/blue-gem-trimmed.png',
+        'images/heart-trimmed.png'
     ]);
     Resources.onReady(init);
 

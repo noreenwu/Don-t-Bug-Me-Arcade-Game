@@ -18,7 +18,9 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    (this.x > 400) ? this.x = -10 : this.x += this.rate;  // TODO: * dt ?
+    let increment = dt * this.rate;
+    (this.x > 400) ? this.x = -10 : this.x += increment;  // TODO: * dt ?
+    // debugger
 };
 
 // Draw the enemy on the screen, required method for game
@@ -32,9 +34,12 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
     // this.sprite = 'images/char-cat-girl.png';
-    this.sprite = 'images/char-boy-trimmed-red-background.png';
+    this.stdsprite = 'images/char-boy-trimmed-red-background.png';
+    this.supersprite = 'images/char-cat-girl-trimmed.png';
+    this.sprite = this.stdsprite;
     this.x = 200;
     this.y = 500;
+    this.health = false;
     // this.w = Resources.get('images/char-boy.png').naturalWidth;
     // this.h = Resources.get('images/char-boy.png').naturalHeight;
 }
@@ -48,24 +53,30 @@ Player.prototype.reset = function() {
     this.y = 500;
 };
 
-Player.prototype.nmove = function(moveData, stayOnBoard) {
-  const [coord, change, lim] = moveData;
-  // console.log("move");
-
-  return stayOnBoard(moveData);
+Player.prototype.gotHealth = function() {
+    this.health = true;
+    this.sprite = this.supersprite;
+    setTimeout(this.healthFades, 5000, this);
 }
 
-function move(moveData, stayOnBoard) {
-  // moveData will be an array of needed values (current position,
-  //    amount to move and what limit is being observed)
-  // stayOnBoard() is a function which keeps the player on the board:
-  //    that is lower than the upper limits of the screen if
-  //    the player is moving to the right or down and
-  //    higher than the lowest limits if the player is moving
-  //    left or up (towards the 0,0 coordinate)
+Player.prototype.isExtraHealthy = function() {
+    return this.health;
+}
 
+Player.prototype.healthFades = function(obj) {
+    obj.health = false;
+    obj.sprite = obj.stdsprite;
+}
+
+// moveData will be an array of needed values (current position,
+//    amount to move and what limit is being observed)
+// stayOnBoard() is a function which keeps the player on the board:
+//    that is lower than the upper limits of the screen if
+//    the player is moving to the right or down and
+//    higher than the lowest limits if the player is moving
+//    left or up (towards the 0,0 coordinate)
+Player.prototype.move = function(moveData, stayOnBoard) {
   const [coord, change, lim] = moveData;
-  // console.log("move");
 
   return stayOnBoard(moveData);
 }
@@ -79,16 +90,6 @@ Player.prototype.notTooLow = function(moveData) {
      // only allow the change if the result is not below the lower limit of screen
 }
 
-// function notTooLow(moveData) {
-//
-//     const [coord, change, lim] = moveData;
-//     console.log("notTooLow " + coord);
-//
-//     let proposedChange = coord + change;
-//     return (proposedChange >= lim ? proposedChange : coord);
-//        // only allow the change if the result is not below the lower limit of screen
-// }
-
 Player.prototype.notTooHigh = function(moveData) {
   const [coord, change, lim] = moveData;
 
@@ -99,37 +100,53 @@ Player.prototype.notTooHigh = function(moveData) {
   // only allow the change to take effect if the limit is not exceeded
 }
 
-// function notTooHigh(moveData) {
-//   const [coord, change, lim] = moveData;
-//
-//   console.log("notTooHigh " + coord);
-//   let proposedChange = coord + change;
-//
-//   return (proposedChange <= lim ? proposedChange : coord);
-//   // only allow the change to take effect if the limit is not exceeded
-// }
-
-
 Player.prototype.handleInput = function(k) {
   if (k == 'up') {
-    // this.y -= 10;
-    this.y = this.nmove([this.y, -18, 0], this.notTooLow);    // TODO: give 0 a name
+    this.y = this.move([this.y, -18, 0], this.notTooLow);    // TODO: give 0 a name
 
   } else if (k == 'down') {
-    // this.y += 10;
-    this.y = this.nmove([this.y, +18, 500], this.notTooHigh); // high in coordinate value but bottom of screen
+    this.y = this.move([this.y, +18, 500], this.notTooHigh); // high in coordinate value but bottom of screen
   } else if (k == 'left') {
-    // this.x -= 10;
-    this.x = this.nmove([this.x, -18, 0], this.notTooLow);
+    this.x = this.move([this.x, -18, 0], this.notTooLow);
   } else if (k == 'right') {
-    // this.x += 10;
-    this.x = this.nmove([this.x, +18, 415], this.notTooHigh);
+    this.x = this.move([this.x, +18, 415], this.notTooHigh);
   }
 };
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+var Health = function() {
+  this.sprite = 'images/heart-trimmed.png';
+  this.x = 140;
+  this.y = 350;
+  this.displayMe = true;
+  this.setup();
+}
+
+Health.prototype.setup = function() {
+    console.log("Health setup");
+    setInterval(this.changeDisplay, 3000, this);
+}
+
+Health.prototype.stop = function() {
+    console.log("Health stop");
+    this.displayMe = false;
+    clearInterval(this.changeDisplay);
+}
+
+Health.prototype.changeDisplay = function(obj) {
+    obj.displayMe = ! obj.displayMe;
+    // obj.x += 10;
+    // obj.y -= 30;
+}
+
+Health.prototype.render = function() {
+   if ( (this.displayMe == true) && !player.isExtraHealthy() ) {
+     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+   }
+}
 
 
 var GemBoard = function() {
@@ -140,7 +157,7 @@ var GemBoard = function() {
 
 GemBoard.prototype.render = function() {
    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+}
 
 GemBoard.prototype.rewarded = function() {
    this.x += 100;
@@ -149,13 +166,14 @@ GemBoard.prototype.rewarded = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let allEnemies = [new Enemy(0, 120, .75), new Enemy(0, 200, 1.25),
-                  new Enemy(0, 270, 1.5), new Enemy(10, 380, 2),
-                  new Enemy(-10, 270, 1.8, 'images/blue-gem-trimmed.png')];
+let allEnemies = [new Enemy(0, 120, 115), new Enemy(0, 200, 90),
+                  new Enemy(0, 270, 120), new Enemy(10, 380, 140),
+                  new Enemy(-10, 270, 60, 'images/blue-gem-trimmed.png')];
 
 let player = new Player();
 let gems = new GemBoard();
 let playing = true;
+let heartHealth = new Health();
 
 function closeModal() {
   console.log("closeModal");
@@ -212,6 +230,7 @@ function tryAgain() {
   document.getElementsByClassName('sorry-modal')[0].style.display = "block";
   // document.getElementsByClassName('modal')[0].style.display = "block";
   stopListeningForKeyInputs();
+  heartHealth.stop();
   playing = false;
 }
 
