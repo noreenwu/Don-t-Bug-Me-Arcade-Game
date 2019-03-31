@@ -103,14 +103,17 @@ var Engine = (function(global) {
             width: 905,
             height: 111 };
 
-        // if (playing == false) {
-        //   return false;            // don't detect collisions if user is not playing
-        // }
-
 
         // has the player won?
         if (detectObjectOverlap(waterRect, playerRect)) {
            showWinner();
+        }
+
+        let gemRect = collectibleGem1.getRect();
+
+        if ( (detectObjectOverlap(gemRect, playerRect)) && ! collectibleGem1.wasCollected() ) {
+           console.log("YOU GOT A GEM!");
+           collectibleGem1.setCollected();
         }
 
         // has the player lost?
@@ -137,8 +140,9 @@ var Engine = (function(global) {
           width: Resources.get(heartHealth.sprite).naturalWidth,
           height: Resources.get(heartHealth.sprite).naturalHeight };
 
-        if (detectObjectOverlap(hhRect, playerRect)) {
+        if ( (detectObjectOverlap(hhRect, playerRect)) && !heartHealth.wasCollected() ) {
             player.gotHealth();
+            heartHealth.setCollected();
             // make heart disappear
             console.log("YOU GOT HEALTH!");
             // enemies are harmless until health times out
@@ -233,7 +237,8 @@ var Engine = (function(global) {
 
         player.render();
         heartHealth.render();
-        gems.render();
+        // gems.render();
+        collectibleGem1.render();
     }
 
     /* This function does nothing but it could have been a good place to
