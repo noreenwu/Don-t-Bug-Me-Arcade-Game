@@ -229,52 +229,28 @@ class nCollectible {
 
 /*
 */
-// var Health = function() {
-//   this.sprite = 'images/heart-trimmed.png';
-//   // this.locations = [ new Location(140, 350), new Location(170, 200)];
-//   this.locationsX = [ 140, 350, 200, 300, 100 ];
-//   this.locationsY = [ 350, 300, 100, 200, 350 ];
-//   this.locationIdx = 0;
-//   this.x = 140;
-//   this.y = 350;
-//   this.displayMe = true;
-//   this.collected = false;
-//   this.setup();
-// }
-//
-// Health.prototype.setup = function() {
-//     console.log("Health setup");
-//     setInterval(this.changeDisplay, 3000, this);
-// }
-//
-// Health.prototype.stop = function() {
-//     console.log("Health stop");
-//     this.displayMe = false;
-//     clearInterval(this.changeDisplay);
-// }
-//
-// Health.prototype.changeDisplay = function(obj) {
-//   //  obj.displayMe = ! obj.displayMe;
-//     obj.x = obj.locationsX[obj.locationIdx];
-//     obj.y = obj.locationsY[obj.locationIdx];
-//     // rotate the heart location based on the arrays of coordinates
-//     obj.locationIdx = (obj.locationIdx + 1) % obj.locationsX.length;
-//     obj.collected = false;
-// }
-//
-// Health.prototype.render = function() {
-//    if ( (this.displayMe == true) && !player.isExtraHealthy() && playing ) {
-//      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-//    }
-// }
-//
-// Health.prototype.setCollected = function() {
-//    this.collected = true;
-// }
-//
-// Health.prototype.wasCollected = function() {
-//    return this.collected;
-// }
+
+class MessageField {
+    constructor() {
+    }
+
+    messageUser(msg) {
+      let f = document.getElementById("message");
+      f.textContent = msg;
+    }
+}
+
+class GemAward {
+  constructor(x = 400, y = 400, sprite = 'images/blue-gem-mini.png') {
+    this.sprite = sprite;
+    this.x = x;
+    this.y = y;
+  }
+
+  render() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  }
+}
 
 // var GemBoard = function() {
 //    this.sprite = 'images/blue-gem-trimmed.png';
@@ -298,9 +274,7 @@ let allEnemies = [new Enemy(0, 120, 115), new Enemy(0, 200, 90),
 
 
 let player = new Player();
-// let gems = new GemBoard();
 let playing = true;
-// let heartHealth = new Health();
 let heartHealth = new nCollectible(140, 350, 'images/heart-trimmed.png', 3000)
 let collectibleGem1 = new nCollectible(350, 100, 'images/blue-gem-trimmed.png', 2700);
 
@@ -327,9 +301,11 @@ function newGame() {
   resetPlayerPosition();
   collectibleGem1.reset();
   listenForKeyInputs();   // listen for key inputs
+  numHealth = 0;
+  numGems = 0;
   playing = true;
+  m.messageUser("New Game");
 }
-
 
 
 // This listens for key presses and sends the keys to your
@@ -379,3 +355,8 @@ let hhRect  = { x: 100, y: 100, width: 30, height: 30 };
 listenForKeyInputs();
 let numHealth = 0;
 let numGems = 0;
+
+let m = new MessageField();
+let f = document.getElementById("message");
+f.textContent = "wa wa wa";
+m.messageUser("here is a message");

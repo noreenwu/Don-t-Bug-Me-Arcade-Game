@@ -129,11 +129,7 @@ var Engine = (function(global) {
 
         });
 
-        // let hhRect = {
-        //   x: heartHealth.x,
-        //   y: heartHealth.y,
-        //   width: Resources.get(heartHealth.sprite).naturalWidth,
-        //   height: Resources.get(heartHealth.sprite).naturalHeight };
+
 
         hhRect = heartHealth.getRect(hhRect);
 
@@ -143,6 +139,7 @@ var Engine = (function(global) {
             // make heart disappear
             numHealth++;
             console.log("YOU GOT HEALTH! " + numHealth);
+            m.messageUser("YOU GOT HEALTH!");
             // debugger
             // enemies are harmless until health times out
             allEnemies.forEach(function(enemy) {
@@ -157,6 +154,7 @@ var Engine = (function(global) {
         if ( (detectObjectOverlap(gemRect, playerRect)) && collectibleGem1.visible() ) {
            numGems++;
            console.log("YOU GOT A GEM!" + numGems);
+           m.messageUser("YOU GOT A GEM!");
            // debugger
            collectibleGem1.setCollected();
         }
@@ -280,7 +278,8 @@ var Engine = (function(global) {
         'images/char-boy-trimmed-red-background.png',
         'images/blue-gem-trimmed.png',
         'images/heart-trimmed.png',
-        'images/ghost-bug.png'
+        'images/ghost-bug.png',
+        'images/blue-gem-mini.png'
     ]);
     Resources.onReady(init);
 
