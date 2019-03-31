@@ -135,104 +135,146 @@ Player.prototype.render = function() {
 };
 
 
-let Collectible = function(x = 300, y = 200) {
-  this.sprite = 'images/blue-gem-trimmed.png';
-  this.x = 300;
-  this.y = 200;
-  this.displayMe = false;
-  this.collected = false;    // whether gem was collected at current location
-  this.setup();
+class Rectangle {
+  constructor(x = 0, y = 0, width = 101, height = 106) {
+      this.x = x;
+      this.y = y;
+      this.width = width;
+      this.height = height;
+  }
 }
 
-Collectible.prototype.setup = function() {
-    setInterval(this.changeDisplay, 2800, this);
+/*
+*/
+class nCollectible {
+  constructor(x = 300, y = 200, sprite = 'images/blue-gem-trimmed.png', displayInt = 3000,
+              rangeX1 = 30, rangeX2 = 400) {
+    this.sprite = sprite;
+    this.x = x;
+    this.y = y;
+    this.rangeX1 = rangeX1;
+    this.rangeX2 = rangeX2;
+    this.displayMe = true;
+    this.collected = false;
+    this.displayInt = displayInt;
+    this.setup();
+  }
+
+  setup() {
+    setInterval(this.changeDisplay, this.displayInt, this);
+  }
+
+  reset() {
+    this.displayMe = true;
+    this.collected = false;
+  }
+
+
+  stop() {
+      this.displayMe = false;
+      clearInterval(this.changeDisplay);
+  }
+
+  getRandomInt(min, max) {
+      return Math.floor(min + Math.random()*(max + 1 - min));
+  }
+
+  changeDisplay(obj) {
+    obj.displayMe = !obj.displayMe;
+    obj.moveMe(obj);
+    if (obj.displayMe) {
+       obj.collected = false;
+    }
+  }
+
+  render() {
+     // if ( (this.displayMe == true) && (this.collected == false) && playing ) {
+     if ( (this.displayMe == true) && playing ) {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+     }
+  }
+
+  getRect(rect) {
+    rect = {
+        x: this.x,
+        y: this.y,
+        width: Resources.get(this.sprite).naturalWidth,
+        height: Resources.get(this.sprite).naturalHeight };
+
+        // console.log("getRect " + this.x, this.y, rect.width, rect.height);
+     return(rect);
+  }
+
+  moveMe(obj) {
+    obj.x = obj.getRandomInt(obj.rangeX1, obj.rangeX2);
+    obj.y = obj.getRandomInt(100, 400);
+    obj.displayMe = true;    // as soon as you move, you should be true
+  }
+
+  setCollected() {
+    this.collected = true;
+    // this.moveMe(this);
+
+    this.displayMe = false;  // when to reset this to true?
+  }
+
+  wasCollected() {
+    return this.collected;
+  }
+
+  visible() {
+    return this.displayMe;
+  }
 }
 
-Collectible.prototype.changeDisplay = function(obj) {
-  obj.displayMe = !obj.displayMe;
-  obj.x = obj.getRandomInt(200, 450);
-  console.log("random int obj.x " + obj.x);
-  obj.y = obj.getRandomInt(200, 450);
-}
-
-Collectible.prototype.getRandomInt = function(min, max) {
-    return Math.floor(min + Math.random()*(max + 1 - min));
-}
-
-Collectible.prototype.render = function() {
-   if ( (this.displayMe == true) && playing ) {
-     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-   }
-}
-
-Collectible.prototype.getRect = function() {
-  const rect = {
-      x: this.x,
-      y: this.y,
-      width: Resources.get(this.sprite).naturalWidth,
-      height: Resources.get(this.sprite).naturalHeight };
-
-   return(rect);
-}
-Collectible.prototype.setCollected = function() {
-  this.collected = true;
-}
-
-Collectible.prototype.wasCollected = function() {
-  return this.collected;
-}
-
-let Location = function(x, y) {
-  this.x = 0;
-  this.y = 0;
-}
-
-var Health = function() {
-  this.sprite = 'images/heart-trimmed.png';
-  // this.locations = [ new Location(140, 350), new Location(170, 200)];
-  this.locationsX = [ 140, 350, 200, 300, 100 ];
-  this.locationsY = [ 350, 300, 100, 200, 350 ];
-  this.locationIdx = 0;
-  this.x = 140;
-  this.y = 350;
-  this.displayMe = true;
-  this.collected = false;
-  this.setup();
-}
-
-Health.prototype.setup = function() {
-    console.log("Health setup");
-    setInterval(this.changeDisplay, 3000, this);
-}
-
-Health.prototype.stop = function() {
-    console.log("Health stop");
-    this.displayMe = false;
-    clearInterval(this.changeDisplay);
-}
-
-Health.prototype.changeDisplay = function(obj) {
-    console.log("locationIdx " + obj.locationIdx);
-    obj.displayMe = ! obj.displayMe;
-    obj.x = obj.locationsX[obj.locationIdx];
-    obj.y = obj.locationsY[obj.locationIdx];
-    // rotate the heart location based on the arrays of coordinates
-    obj.locationIdx = (obj.locationIdx + 1) % obj.locationsX.length;
-}
-
-Health.prototype.render = function() {
-   if ( (this.displayMe == true) && !player.isExtraHealthy() && playing ) {
-     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-   }
-}
-
-Health.prototype.setCollected = function() {
-   this.collected = true;
-}
-
-Health.prototype.wasCollected = function() {
-   return this.collected;
-}
+/*
+*/
+// var Health = function() {
+//   this.sprite = 'images/heart-trimmed.png';
+//   // this.locations = [ new Location(140, 350), new Location(170, 200)];
+//   this.locationsX = [ 140, 350, 200, 300, 100 ];
+//   this.locationsY = [ 350, 300, 100, 200, 350 ];
+//   this.locationIdx = 0;
+//   this.x = 140;
+//   this.y = 350;
+//   this.displayMe = true;
+//   this.collected = false;
+//   this.setup();
+// }
+//
+// Health.prototype.setup = function() {
+//     console.log("Health setup");
+//     setInterval(this.changeDisplay, 3000, this);
+// }
+//
+// Health.prototype.stop = function() {
+//     console.log("Health stop");
+//     this.displayMe = false;
+//     clearInterval(this.changeDisplay);
+// }
+//
+// Health.prototype.changeDisplay = function(obj) {
+//   //  obj.displayMe = ! obj.displayMe;
+//     obj.x = obj.locationsX[obj.locationIdx];
+//     obj.y = obj.locationsY[obj.locationIdx];
+//     // rotate the heart location based on the arrays of coordinates
+//     obj.locationIdx = (obj.locationIdx + 1) % obj.locationsX.length;
+//     obj.collected = false;
+// }
+//
+// Health.prototype.render = function() {
+//    if ( (this.displayMe == true) && !player.isExtraHealthy() && playing ) {
+//      ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+//    }
+// }
+//
+// Health.prototype.setCollected = function() {
+//    this.collected = true;
+// }
+//
+// Health.prototype.wasCollected = function() {
+//    return this.collected;
+// }
 
 // var GemBoard = function() {
 //    this.sprite = 'images/blue-gem-trimmed.png';
@@ -258,9 +300,9 @@ let allEnemies = [new Enemy(0, 120, 115), new Enemy(0, 200, 90),
 let player = new Player();
 // let gems = new GemBoard();
 let playing = true;
-let heartHealth = new Health();
-// let gemCollectible = new Collectible();
-let collectibleGem1 = new Collectible(350, 100);
+// let heartHealth = new Health();
+let heartHealth = new nCollectible(140, 350, 'images/heart-trimmed.png', 3000)
+let collectibleGem1 = new nCollectible(350, 100, 'images/blue-gem-trimmed.png', 2700);
 
 function closeModal() {
   console.log("closeModal");
@@ -283,6 +325,7 @@ function newGame() {
   closeModal();
   // reset();                // move player back to starting place
   resetPlayerPosition();
+  collectibleGem1.reset();
   listenForKeyInputs();   // listen for key inputs
   playing = true;
 }
@@ -330,4 +373,9 @@ function showWinner() {
 
 }
 
+let gemRect = { x: 100, y: 100, width: 30, height: 30 };
+let hhRect  = { x: 100, y: 100, width: 30, height: 30 };
+
 listenForKeyInputs();
+let numHealth = 0;
+let numGems = 0;

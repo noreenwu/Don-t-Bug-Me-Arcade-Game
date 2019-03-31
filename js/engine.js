@@ -109,18 +109,13 @@ var Engine = (function(global) {
            showWinner();
         }
 
-        let gemRect = collectibleGem1.getRect();
 
-        if ( (detectObjectOverlap(gemRect, playerRect)) && ! collectibleGem1.wasCollected() ) {
-           console.log("YOU GOT A GEM!");
-           collectibleGem1.setCollected();
-        }
 
         // has the player lost?
         allEnemies.forEach(function(enemy) {
             enemyRect.x = enemy.x;
             enemyRect.y = enemy.y;
-            enemyRect.width = Resources.get(enemy.sprite).naturalWidth-10;
+            enemyRect.width = Resources.get(enemy.sprite).naturalWidth;
             enemyRect.height = Resources.get(enemy.sprite).naturalHeight;
 
             playerRect.x = player.x;
@@ -134,22 +129,38 @@ var Engine = (function(global) {
 
         });
 
-        let hhRect = {
-          x: heartHealth.x,
-          y: heartHealth.y,
-          width: Resources.get(heartHealth.sprite).naturalWidth,
-          height: Resources.get(heartHealth.sprite).naturalHeight };
+        // let hhRect = {
+        //   x: heartHealth.x,
+        //   y: heartHealth.y,
+        //   width: Resources.get(heartHealth.sprite).naturalWidth,
+        //   height: Resources.get(heartHealth.sprite).naturalHeight };
 
-        if ( (detectObjectOverlap(hhRect, playerRect)) && !heartHealth.wasCollected() ) {
+        hhRect = heartHealth.getRect(hhRect);
+
+        if ( (detectObjectOverlap(hhRect, playerRect)) && heartHealth.visible() ) {
             player.gotHealth();
             heartHealth.setCollected();
             // make heart disappear
-            console.log("YOU GOT HEALTH!");
+            numHealth++;
+            console.log("YOU GOT HEALTH! " + numHealth);
+            // debugger
             // enemies are harmless until health times out
             allEnemies.forEach(function(enemy) {
                 enemy.harmlessSprite();
             });
         }
+
+
+        gemRect = collectibleGem1.getRect(gemRect);
+
+        // if ( (detectObjectOverlap(gemRect, playerRect)) && !collectibleGem1.wasCollected() && collectibleGem1.visible() ) {
+        if ( (detectObjectOverlap(gemRect, playerRect)) && collectibleGem1.visible() ) {
+           numGems++;
+           console.log("YOU GOT A GEM!" + numGems);
+           // debugger
+           collectibleGem1.setCollected();
+        }
+
         return false;
     }
 
@@ -247,6 +258,8 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
+        console.log("game reset");
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
