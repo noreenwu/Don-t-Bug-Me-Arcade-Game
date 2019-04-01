@@ -71,8 +71,8 @@ of graphic files:
 'images/ghost-bug.png'               // ghost version of the enemy bug
 
 
+<a name="notes">
 # Implementation Notes
-
 
 All graphics were provided for this project, however, I did edit them so that
 their actual dimensions could be programmatically determined, in figuring out
