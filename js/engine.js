@@ -4,6 +4,9 @@
  *  March 31, 2019
  */
 
+/*  Most of this file was provided as part of the code base, but a lot
+ *  of changes were filled in in the function checkCollisions().
+ */
 
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
@@ -91,9 +94,17 @@ var Engine = (function(global) {
         }
     }
 
+    /*  This function contains the logic which determines whether the player
+     *  is still in the game, whether s/he has earned a Gem or Health,
+     *  bumped into an enemy bug and lost the game, or reached the safety
+     *  of the water and won the game. It is all based on the rectangular
+     *  coordinates of each graphic in the 2D space and whether overlaps
+     *  have occurred.
+    */
     function checkCollisions() {
-        const waterRect = {
-            x: 0,
+
+        const waterRect = {   // the size and coordinates of the rectangle
+            x: 0,             // representing the water does not change
             y: 0,
             width: 905,
             height: 111 };
@@ -126,6 +137,8 @@ var Engine = (function(global) {
             }
         });
 
+        // Has the player intersected with a Heart? If so, the player token
+        // changes to the Cat Girl and the enemy bugs become ghost-like.
         hhRect = heartHealth.getRect(hhRect);
 
         if ( (detectObjectOverlap(hhRect, pRect)) && heartHealth.visible() ) {
@@ -139,6 +152,8 @@ var Engine = (function(global) {
             });
         }
 
+        // Has the player intersected with a Gem? We aren't keeping score in this game,
+        // but the user will see a message that s/he has earned a Gem.
         gemRect = collectibleGem1.getRect(gemRect);
 
         if ( (detectObjectOverlap(gemRect, pRect)) && collectibleGem1.visible() ) {
@@ -147,6 +162,10 @@ var Engine = (function(global) {
         }
     }
 
+    // This is the function that determines whether or not 2 rectangles overlap.
+    // The rectangle representing each graphic in the pair that needs to be compared
+    // are sent to this function and true (intersection found) or false (no intersection)
+    // is returned.
     function detectObjectOverlap(rect1, rect2) {
       if (rect1.x < rect2.x + rect2.width &&
          rect1.x + rect1.width > rect2.x &&

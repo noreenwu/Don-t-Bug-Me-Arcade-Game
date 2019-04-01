@@ -11,6 +11,7 @@
 
 
 # How to Play
+
 If you've ever played the old Arcade game Frogger, this game will be very similar.
 You, the player, have to navigate to the water without colliding with any of the
 oncoming enemies: giant bugs! If you do collide with one of the bugs, the game
@@ -25,6 +26,8 @@ a Heart, your player will transform into Cat Girl, and will be immune to the Bug
 (who will temporarily appear ghost-like)...for a short while, which may give you
 an edge in reaching the water and winning the game. You may also then have a
 better chance of collecting blue Gems which will appear randomly on the screen.
+Note that in this version you cannot accumulate Health, and your extra Health
+may run out in relation to the first Health bonus you picked up.
 
 # How to Load the Game
 
@@ -39,6 +42,19 @@ This game runs in all modern browsers that support Javascript ES6, CSS and HTML5
 Open index.html in any browser to play the game. This file depends on css/style.css,
 the javascript files app.js, engine.js, and resources.js, as well as a bunch
 of graphic files:
+
+'images/stone-block.png',            // building blocks for the screen
+'images/water-block.png',
+'images/grass-block.png',
+'images/enemy-bug.png',              // replaced by enemy-bug-trimmed.png
+'images/char-boy.png',               // replaced by char-boy-trimmed-red-background.png
+'images/char-cat-girl-trimmed.png',
+'images/enemy-bug-trimmed.png',
+'images/char-boy-trimmed.png',       // not currently in use
+'images/char-boy-trimmed-red-background.png',   
+'images/blue-gem-trimmed.png',
+'images/heart-trimmed.png',          // the Heart
+'images/ghost-bug.png'               // ghost version of the enemy bug
 
 # Implementation Notes
 
