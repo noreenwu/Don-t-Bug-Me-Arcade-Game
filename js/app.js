@@ -1,4 +1,8 @@
-// Enemies our player must avoid (unless it's a gem, an "antiEnemy")
+
+
+
+
+// Enemies our player must avoid
 var Enemy = function(x, y, rate, sprite = 'images/enemy-bug-trimmed.png') {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -32,28 +36,25 @@ Enemy.prototype.harmlessSprite = function() {
   setTimeout(this.enemyStatus, 5000, this);
 }
 
-// Enemy.prototype.flashStatus = function(obj) {
-//     if (obj.sprite == 'images/enemy-bug-trimmed.png') {
-//       obj.sprite = 'images/ghost-bug.png';
-//     }
-//     else {
-//       obj.sprite = 'images/enemy-bug-trimmed.png';
-//     }
-// }
-
 Enemy.prototype.enemyStatus = function(obj) {
     obj.sprite = 'images/enemy-bug-trimmed.png';
 }
 
-// Enemy.prototype.harmlessStatus = function(obj) {
-//     obj.sprite = 'images/ghost-bug.png';
-// }
+Enemy.prototype.getRect = function(rect) {
+    rect.x = this.x;
+    rect.y = this.y;
+    rect.width = Resources.get(this.sprite).naturalWidth;
+    rect.height = Resources.get(this.sprite).naturalHeight;
+
+    return rect;
+}
+
+
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
-    // this.sprite = 'images/char-cat-girl.png';
     this.stdsprite = 'images/char-boy-trimmed-red-background.png';
     this.supersprite = 'images/char-cat-girl-trimmed.png';
     this.sprite = this.stdsprite;
@@ -128,12 +129,20 @@ Player.prototype.handleInput = function(k) {
   } else if (k == 'right') {
     this.x = this.move([this.x, +18, 415], this.notTooHigh);
   }
-};
+}
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+}
 
+Player.prototype.getRect = function(rect) {
+    rect.x = this.x;
+    rect.y = this.y,
+    rect.width = Resources.get(this.sprite).naturalWidth;
+    rect.height = Resources.get(this.sprite).naturalHeight;
+
+    return rect;
+}
 
 class Rectangle {
   constructor(x = 0, y = 0, width = 101, height = 106) {
@@ -146,7 +155,7 @@ class Rectangle {
 
 /*
 */
-class nCollectible {
+class Collectible {
   constructor(x = 300, y = 200, sprite = 'images/blue-gem-trimmed.png', displayInt = 3000,
               rangeX1 = 30, rangeX2 = 400) {
     this.sprite = sprite;
@@ -240,31 +249,7 @@ class MessageField {
     }
 }
 
-class GemAward {
-  constructor(x = 400, y = 400, sprite = 'images/blue-gem-mini.png') {
-    this.sprite = sprite;
-    this.x = x;
-    this.y = y;
-  }
 
-  render() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  }
-}
-
-// var GemBoard = function() {
-//    this.sprite = 'images/blue-gem-trimmed.png';
-//    this.x = 0;
-//    this.y = 500;
-// }
-//
-// GemBoard.prototype.render = function() {
-//    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-// }
-//
-// GemBoard.prototype.rewarded = function() {
-//    this.x += 100;
-// }
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -275,11 +260,10 @@ let allEnemies = [new Enemy(0, 120, 115), new Enemy(0, 200, 90),
 
 let player = new Player();
 let playing = true;
-let heartHealth = new nCollectible(140, 350, 'images/heart-trimmed.png', 3000)
-let collectibleGem1 = new nCollectible(350, 100, 'images/blue-gem-trimmed.png', 2700);
+let heartHealth = new Collectible(140, 350, 'images/heart-trimmed.png', 3000)
+let collectibleGem1 = new Collectible(350, 100, 'images/blue-gem-trimmed.png', 2700);
 
 function closeModal() {
-  console.log("closeModal");
   document.getElementById('congrats-modal').style.display = "none";
   document.getElementsByClassName('thankyou-modal')[0].style.display = "none";
   document.getElementsByClassName('sorry-modal')[0].style.display = "none";
@@ -295,16 +279,12 @@ function resetPlayerPosition() {
 }
 
 function newGame() {
-  console.log("new game...");
   closeModal();
-  // reset();                // move player back to starting place
-  resetPlayerPosition();
+  resetPlayerPosition();     // move player back to starting place
   collectibleGem1.reset();
-  listenForKeyInputs();   // listen for key inputs
-  numHealth = 0;
-  numGems = 0;
+  listenForKeyInputs();      // listen for key inputs: the user pressing arrow keys
   playing = true;
-  m.messageUser("New Game");
+  m.messageUser("Use arrow keys to move. Good luck!");
 }
 
 
@@ -334,7 +314,6 @@ function stopListeningForKeyInputs() {
 
 function tryAgain() {
   document.getElementsByClassName('sorry-modal')[0].style.display = "block";
-  // document.getElementsByClassName('modal')[0].style.display = "block";
   stopListeningForKeyInputs();
   heartHealth.stop();
   playing = false;
@@ -343,7 +322,6 @@ function tryAgain() {
 function showWinner() {
   document.getElementById('congrats-modal').style.display = "block";
   document.getElementsByClassName('modal')[0].style.display = "block";
-
   stopListeningForKeyInputs();
   playing = false;
 
@@ -351,12 +329,10 @@ function showWinner() {
 
 let gemRect = { x: 100, y: 100, width: 30, height: 30 };
 let hhRect  = { x: 100, y: 100, width: 30, height: 30 };
+let enRect = { x: 100, y: 100, width: 30, height: 30 };
+let pRect = { x: 100, y: 100, width: 30, height: 30 };
 
 listenForKeyInputs();
-let numHealth = 0;
-let numGems = 0;
-
 let m = new MessageField();
 let f = document.getElementById("message");
-f.textContent = "wa wa wa";
-m.messageUser("here is a message");
+m.messageUser("Use arrow keys to move. Have fun!");

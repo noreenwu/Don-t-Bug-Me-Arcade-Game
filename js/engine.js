@@ -1,3 +1,10 @@
+/*
+ *  Noreen Wu
+ *  Udacity Front-End Developer Assignment 3
+ *  March 31, 2019
+ */
+
+
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
@@ -85,18 +92,6 @@ var Engine = (function(global) {
     }
 
     function checkCollisions() {
-        const playerRect = {
-            x: player.x,
-            y: player.y,
-            width: Resources.get(player.sprite).naturalWidth,
-            height: Resources.get(player.sprite).naturalHeight };
-
-        const enemyRect = {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0 };
-
         const waterRect = {
             x: 0,
             y: 0,
@@ -104,66 +99,55 @@ var Engine = (function(global) {
             height: 111 };
 
 
-        // has the player won?
-        if (detectObjectOverlap(waterRect, playerRect)) {
+        pRect = player.getRect(pRect);   // get player rectangular coordinates
+
+        // Has the player won?
+        // We compare the rectangle that is occupied by the water graphic
+        // with the rectangle occupied by the player, to determine whether
+        // the player has won.
+        if (detectObjectOverlap(waterRect, pRect)) {
            showWinner();
         }
 
-
-
-        // has the player lost?
+        // Has the player lost?
+        // All of the enemies are instantiated at the start of the game
+        // and placed in the global array, allEnemies. Now to determine
+        // whether the player has lost, we loop through all the enemies
+        // and figure out whether each enemy overlaps with the player's
+        // rectangle.
         allEnemies.forEach(function(enemy) {
-            enemyRect.x = enemy.x;
-            enemyRect.y = enemy.y;
-            enemyRect.width = Resources.get(enemy.sprite).naturalWidth;
-            enemyRect.height = Resources.get(enemy.sprite).naturalHeight;
 
-            playerRect.x = player.x;
-            playerRect.y = player.y;
+            enRect = enemy.getRect(enRect);
 
             // if a collision with a bug (enemy) is detected then unless the player
             // has extra health from intersecting with the heart, then the game ends.
-            if (detectObjectOverlap(enemyRect, playerRect) && !player.isExtraHealthy() ) {
+            if (detectObjectOverlap(enRect, pRect) && !player.isExtraHealthy() ) {
               tryAgain();
             }
-
         });
-
-
 
         hhRect = heartHealth.getRect(hhRect);
 
-        if ( (detectObjectOverlap(hhRect, playerRect)) && heartHealth.visible() ) {
+        if ( (detectObjectOverlap(hhRect, pRect)) && heartHealth.visible() ) {
             player.gotHealth();
             heartHealth.setCollected();
-            // make heart disappear
-            numHealth++;
-            console.log("YOU GOT HEALTH! " + numHealth);
             m.messageUser("YOU GOT HEALTH!");
-            // debugger
-            // enemies are harmless until health times out
+
+            // enemies are harmless, and look ghost-like, until health times out
             allEnemies.forEach(function(enemy) {
                 enemy.harmlessSprite();
             });
         }
 
-
         gemRect = collectibleGem1.getRect(gemRect);
 
-        // if ( (detectObjectOverlap(gemRect, playerRect)) && !collectibleGem1.wasCollected() && collectibleGem1.visible() ) {
-        if ( (detectObjectOverlap(gemRect, playerRect)) && collectibleGem1.visible() ) {
-           numGems++;
-           console.log("YOU GOT A GEM!" + numGems);
+        if ( (detectObjectOverlap(gemRect, pRect)) && collectibleGem1.visible() ) {
            m.messageUser("YOU GOT A GEM!");
-           // debugger
            collectibleGem1.setCollected();
         }
-
-        return false;
     }
 
     function detectObjectOverlap(rect1, rect2) {
-
       if (rect1.x < rect2.x + rect2.width &&
          rect1.x + rect1.width > rect2.x &&
          rect1.y < rect2.y + rect2.height &&
@@ -246,7 +230,6 @@ var Engine = (function(global) {
 
         player.render();
         heartHealth.render();
-        // gems.render();
         collectibleGem1.render();
     }
 
@@ -256,8 +239,6 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
-        console.log("game reset");
-
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -271,15 +252,12 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/char-cat-girl-trimmed.png',
-        // 'images/char-boy-background.png',
-        // 'images/enemy-bug-background.png',
         'images/enemy-bug-trimmed.png',
         'images/char-boy-trimmed.png',
         'images/char-boy-trimmed-red-background.png',
         'images/blue-gem-trimmed.png',
         'images/heart-trimmed.png',
-        'images/ghost-bug.png',
-        'images/blue-gem-mini.png'
+        'images/ghost-bug.png'
     ]);
     Resources.onReady(init);
 
