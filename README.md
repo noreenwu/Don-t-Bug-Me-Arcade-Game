@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [How to Play](#how to play)
+- [How to Play](#How to Play)
 - [How to Load the Game](#how to load the game)
 - [Dependencies](#dependencies)
 - [Necessary Files](#necessary files)
@@ -44,17 +44,29 @@ the javascript files app.js, engine.js, and resources.js, as well as a bunch
 of graphic files:
 
 'images/stone-block.png',            // building blocks for the screen
+
 'images/water-block.png',
+
 'images/grass-block.png',
+
 'images/enemy-bug.png',              // replaced by enemy-bug-trimmed.png
+
 'images/char-boy.png',               // replaced by char-boy-trimmed-red-background.png
+
 'images/char-cat-girl-trimmed.png',
+
 'images/enemy-bug-trimmed.png',
+
 'images/char-boy-trimmed.png',       // not currently in use
+
 'images/char-boy-trimmed-red-background.png',   
+
 'images/blue-gem-trimmed.png',
+
 'images/heart-trimmed.png',          // the Heart
+
 'images/ghost-bug.png'               // ghost version of the enemy bug
+
 
 # Implementation Notes
 
