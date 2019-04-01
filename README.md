@@ -2,14 +2,15 @@
 
 ## Table of Contents
 
-- [How to Play](#How to Play)
-- [How to Load the Game](#how to load the game)
+- [How to Play](#howtoplay)
+- [How to Load the Game](#howtoloadthegame)
 - [Dependencies](#dependencies)
-- [Necessary Files](#necessary files)
+- [Necessary Files](#necessaryfiles)
 - [Notes](#notes)
 - [License](#license)
 
 
+<a name="howtoplay">
 # How to Play
 
 If you've ever played the old Arcade game Frogger, this game will be very similar.
@@ -29,6 +30,7 @@ better chance of collecting blue Gems which will appear randomly on the screen.
 Note that in this version you cannot accumulate Health, and your extra Health
 may run out in relation to the first Health bonus you picked up.
 
+<a name="howtoloadthegame">
 # How to Load the Game
 
 To load the game, open index.html in any browser window.
@@ -37,6 +39,7 @@ To load the game, open index.html in any browser window.
 
 This game runs in all modern browsers that support Javascript ES6, CSS and HTML5.
 
+<a name="necessaryfiles">
 # Necessary Files
 
 Open index.html in any browser to play the game. This file depends on css/style.css,
