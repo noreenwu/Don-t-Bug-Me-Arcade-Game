@@ -11,7 +11,7 @@
 
 
 <a name="howtoplay">
-# How to Play
+## How to Play
 
 If you've ever played the old Arcade game Frogger, this game will be very similar.
 You, the player, have to navigate to the water without colliding with any of the
@@ -31,16 +31,16 @@ Note that in this version you cannot accumulate Health, and your extra Health
 may run out in relation to the first Health bonus you picked up.
 
 <a name="howtoloadthegame">
-# How to Load the Game
+## How to Load the Game
 
 To load the game, open index.html in any browser window.
 
-# Dependencies
+## Dependencies
 
 This game runs in all modern browsers that support Javascript ES6, CSS and HTML5.
 
 <a name="necessaryfiles">
-# Necessary Files
+## Necessary Files
 
 Open index.html in any browser to play the game. This file depends on css/style.css,
 the javascript files app.js, engine.js, and resources.js, as well as a bunch
@@ -72,7 +72,7 @@ of graphic files:
 
 
 <a name="notes">
-# Implementation Notes
+## Implementation Notes
 
 All graphics were provided for this project, however, I did edit them so that
 their actual dimensions could be programmatically determined, in figuring out
@@ -93,7 +93,7 @@ disrupting the game in progress.
 
 
 
-# License
+## License
 
 This game is in the public domain and was written by Noreen Wu in March of 2019.
 It is assignment 3 of the Udacity Front-End Developer course.

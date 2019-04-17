@@ -2,6 +2,11 @@ body {
     text-align: center;
 }
 
+h2 {
+  font-family: Helvetica, Arial;
+  font-size: 1.6em;
+  font-style: italic;
+}
 
 .modal-winner {
   display: none;
@@ -30,23 +35,6 @@ body {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-
-/* The Close Button */
-/* .close {
-  color: #aaaaaa;
-  float: right;
-
-  font-size: 28px;
-  font-family: 'Coda', cursive;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-} */
 
 .play-again {
   padding: 20px;

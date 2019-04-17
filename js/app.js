@@ -284,7 +284,12 @@ function closeModal() {
   document.getElementById('congrats-modal').style.display = "none";
   document.getElementsByClassName('thankyou-modal')[0].style.display = "none";
   document.getElementsByClassName('sorry-modal')[0].style.display = "none";
-  document.getElementsByClassName('modal')[0].style.display = "none";
+
+  let modals = document.getElementsByClassName('modal');
+  for (let m of modals) {
+      // [0].style.display = "none";
+      m.style.display = "none";
+  }
 }
 
 function showThanksComeAgain() {
@@ -346,7 +351,13 @@ function showWinner() {
   document.getElementsByClassName('modal')[0].style.display = "block";
   stopListeningForKeyInputs();
   playing = false;
+}
 
+function showGameTitle() {
+  document.getElementById('game-title-modal').style.display = "block";
+  // document.getElementsByClassName('modal')[0].style.display = "block";
+  stopListeningForKeyInputs();
+  playing = false;
 }
 
 // I declared these global rectangles for use in the collision detection
@@ -358,6 +369,7 @@ let hhRect  = { x: 100, y: 100, width: 30, height: 30 };
 let enRect = { x: 100, y: 100, width: 30, height: 30 };
 let pRect = { x: 100, y: 100, width: 30, height: 30 };
 
+showGameTitle();
 listenForKeyInputs();           // ... and the game begins!
 let m = new MessageField();
 m.messageUser("Use arrow keys to move. Have fun!");
